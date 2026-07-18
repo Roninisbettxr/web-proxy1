@@ -57,7 +57,7 @@
             outputDiv.innerHTML = "Loading...";
 
             try {
-                // Send the URL to your local Node.js proxy server
+                // Send the URL to your local Node.js server
                 const response = await fetch(`http://localhost:3000/proxy?url=${encodeURIComponent(url)}`);
                 
                 if (!response.ok) {
