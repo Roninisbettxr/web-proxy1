@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Web Proxy</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        #output { 
+            width: 100%; 
+            height: 500px; 
+            border: 1px solid #ccc; 
+            margin-top: 20px; 
+            padding: 10px; 
+            overflow: auto; 
+            background: #fff;
+        }
+        input { 
+            width: 70%; 
+            padding: 8px; 
+            font-size: 16px;
+        }
+        button { 
+            padding: 8px 15px; 
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Simple Web Proxy</h1>
+        <input type="text" id="urlInput" placeholder="Enter full URL (e.g., https://example.com)">
+        <button onclick="loadPage()">Go</button>
+
+        <div id="output">The website will load here...</div>
+    </div>
+
+    <script>
+        async function loadPage() {
+            const url = document.getElementById('urlInput').value;
+            const outputDiv = document.getElementById('output');
+            
+            if (!url) {
+                return alert('Please enter a URL');
+            }
+
+            outputDiv.innerHTML = "Loading...";
+
+            try {
+                // Send the URL to your local Node.js proxy server
+                const response = await fetch(`http://localhost:3000/proxy?url=${encodeURIComponent(url)}`);
+                
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                
+                const html = await response.text();
+                
+                // Inject the returned HTML into the page
+                outputDiv.innerHTML = html;
+            } catch (error) {
+                outputDiv.innerHTML = "Failed to load page. Make sure your Node.js backend server is running!";
+                console.error("Proxy Error:", error);
+            }
+        }
+    </script>
+
+</body>
+</html>
